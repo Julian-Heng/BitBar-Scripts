@@ -10,3 +10,5 @@
 echo "[$(/usr/local/bin/osx-cpu-temp)]"
 echo "---"
 echo "Fahrenheit: $(/usr/local/bin/osx-cpu-temp -F)"
+echo "---"
+echo "Refresh | refresh=true"
