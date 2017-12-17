@@ -6,7 +6,7 @@
 # <bitbar.author.github>julian-heng</bitbar.author.github>
 # <bitbar.desc>This plugin displays the current memory usage</bitbar.desc>
 # Code snippet from Neofetch by Dylan Arapsch
-# https://github.com/dylanaraps/neofet
+# https://github.com/dylanaraps/neofetch
 
 get_memory() {
 
@@ -22,3 +22,5 @@ get_memory() {
 
 get_memory
 echo "Mem: ${memory}"
+echo "---"
+echo "Refresh | refresh=true"
