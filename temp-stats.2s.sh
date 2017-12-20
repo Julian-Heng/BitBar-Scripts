@@ -7,7 +7,7 @@
 # <bitbar.desc>This plugin displays the current CPU temperatures</bitbar.desc>
 # <bitbar.dependencies>osx-cpu-temp</bitbar.dependencies>
 
-echo "[$(/usr/local/bin/osx-cpu-temp)]"
+echo "$(/usr/local/bin/osx-cpu-temp)"
 echo "---"
 echo "Fahrenheit: $(/usr/local/bin/osx-cpu-temp -F)"
 echo "---"

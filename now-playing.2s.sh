@@ -13,9 +13,8 @@
 apps=(iTunes Spotify)
 
 for i in "${apps[@]}"; do
-	app_state="$(osascript -e "application \"${i}\" is running")"
 
-	if [[ "$?" != "0" ]]; then
+	if ! app_state="$(osascript -e "application \"${i}\" is running")"; then
 		exit
 	fi
 
