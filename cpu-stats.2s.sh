@@ -54,7 +54,7 @@ strip() {
 
 	case "$2" in
 		"0")	unset "$1" ;;
-		*) 		printf "%s" "$2${1:0:1}" ;;
+		*) 		printf "%s" "$2${1:0:1} " ;;
 	esac
 
 }
@@ -70,7 +70,7 @@ get_uptime() {
 	hours="$(strip hours $((seconds / 60 / 60 % 24)))"
 	mins="$(strip mins $((seconds / 60 % 60)))"
 	secs="$(strip secs $((seconds % 60 % 60 % 24)))"
-	printf "%s" "${days} ${hours} ${mins} ${secs}"
+	printf "%s" "${days}${hours}${mins}${secs}"
 
 }
 
