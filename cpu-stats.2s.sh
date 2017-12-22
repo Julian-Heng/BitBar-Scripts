@@ -80,9 +80,9 @@ get_cpu_usage() {
 	cpu_usage="$((${cpu_usage/\.*} / ${cores:-1}))"
 
 	case 1:${cpu_usage:--} in 
-		($((cpu_usage>=100))*)	printf "%s" "${cpu_usage}% | color=#d77c79" ;;
-		($((cpu_usage>=75))*)	printf "%s" "${cpu_usage}% | color=#f4b887" ;;
-		*)						printf "%s" "${cpu_usage}%"
+		($((cpu_usage >= 100))*)	printf "%s" "${cpu_usage}% | color=#d77c79" ;;
+		($((cpu_usage >= 75))*)		printf "%s" "${cpu_usage}% | color=#f4b887" ;;
+		*)							printf "%s" "${cpu_usage}%" ;;
 	esac
 
 }

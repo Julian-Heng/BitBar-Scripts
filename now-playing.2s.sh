@@ -18,7 +18,7 @@ for i in "${apps[@]}"; do
 		exit
 	fi
 
-	if [[ "$app_state" == "true" ]] && [[ "$track" == "" ]]; then
+	if [[ "$app_state" == "true" ]] && [[ -z "$track" ]]; then
 		app_playing="$(osascript -e "tell application \"${i}\" to player state as string")"
 		if [[ "$app_playing" == "paused" ]] ||  [[ "$app_playing" == "0" ]]; then
 			paused="${i}"
@@ -34,15 +34,15 @@ if [[ "$1" == "open" ]]; then
 	exit
 fi
 
-if [[ "$playing" == "" ]] && [[ "$paused" == "" ]]; then
+if [[ -z "$playing" ]] && [[ -z "$paused" ]]; then
 	echo "♫ | color=#767676"
 	echo "---"
 	echo "🙉 No music playing"
 else
-	track=""
-	artist=""
+	unset track
+	unset artist
 
-	if [[ "$playing" == "" ]]; then
+	if [[ -z "$playing" ]]; then
 		echo "♫ | color=#767676"
 		echo "---"
 		app="${paused}"
@@ -56,7 +56,7 @@ else
 	track=$(osascript -e "tell application \"${app}\" to ${track_query}")
 	artist=$(osascript -e "tell application \"${app}\" to ${artist_query}")
 
-	if [[ "$playing" != "" ]]; then
+	if [[ ! -z "$playing" ]]; then
 		echo "♫"
 	fi
 	echo "---"
