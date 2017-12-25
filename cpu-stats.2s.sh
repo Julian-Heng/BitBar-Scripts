@@ -27,22 +27,22 @@ get_cpu_info() {
 get_os_info() {
 
 	osx_version="$(sw_vers -productVersion)"
-	case "$osx_version" in
-		"10.7"*)	printf "%s" "Mac OS X Lion $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.8"*)	printf "%s" "OS X Mountain Lion $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.9"*)	printf "%s" "OS X Mavericks $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.10"*)	printf "%s" "OS X Yosemite $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.11"*)	printf "%s" "OS X El Capitan $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.12"*)	printf "%s" "macOS Sierra $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.13"*)	printf "%s" "macOS High Sierra $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
-		*)			printf "%s" "macOS $osx_version $(sw_vers -buildVersion) $(uname -m)" ;;
+	case "${osx_version}" in
+		"10.7"*)	printf "%s" "Mac OS X Lion ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.8"*)	printf "%s" "OS X Mountain Lion ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.9"*)	printf "%s" "OS X Mavericks ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.10"*)	printf "%s" "OS X Yosemite ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.11"*)	printf "%s" "OS X El Capitan ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.12"*)	printf "%s" "macOS Sierra ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.13"*)	printf "%s" "macOS High Sierra ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		*)			printf "%s" "macOS ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
 	esac    
 
 }
 
 get_model() {
 
-	if [[ "$(kextstat | grep "FakeSMC")" != "" ]]; then
+	if [[ ! -z "$(kextstat | grep "FakeSMC")" ]]; then
 		printf "%s" "Hackintosh (SMBIOS: $(sysctl -n hw.model))"
 	else
 		printf "%s" "$(sysctl -n hw.model)"
@@ -79,7 +79,7 @@ get_cpu_usage() {
 	cpu_usage="$(ps aux | awk 'BEGIN {sum=0} {sum+=$3}; END {print sum}')"
 	cpu_usage="$((${cpu_usage/\.*} / ${cores:-1}))"
 
-	case 1:${cpu_usage:--} in 
+	case "1:${cpu_usage:--}" in 
 		($((cpu_usage >= 100))*)	printf "%s" "${cpu_usage}% | color=#d77c79" ;;
 		($((cpu_usage >= 75))*)		printf "%s" "${cpu_usage}% | color=#f4b887" ;;
 		*)							printf "%s" "${cpu_usage}%" ;;

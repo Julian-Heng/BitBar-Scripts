@@ -18,8 +18,8 @@ get_memory() {
 	mem_used="$(((${mem_wired//.} + ${mem_active//.} + ${mem_compressed//.}) * 4 / 1024))"
 	memoryM="${mem_used}MiB / ${mem_total}MiB"
 
-	mem_total="$(bc <<< "scale = 0; ${mem_total} / 1024")"
-	mem_used="$(bc <<< "scale = 2; ${mem_used} / 1024")"
+	mem_total="$(awk -v a=${mem_total} 'BEGIN {printf "%2.0f", a / 1024}')"
+	mem_used="$(awk -v a=${mem_used} 'BEGIN {printf "%2.2f", a / 1024}')"
 	memoryG="${mem_used} / ${mem_total}GiB"
 
 }
@@ -28,7 +28,20 @@ get_swap() {
 
 	swap_total="$(sysctl vm.swapusage | awk '{ print $4 }')"
 	swap_used="$(sysctl vm.swapusage | awk '{ print $7 }')"
-	swap_usage="${swap_used/.*}MiB / ${swap_total/.*}MiB"
+
+	swap_total="$(trim_digits "${swap_total/M*}")"
+	swap_used="$(trim_digits "${swap_used/M*}")"
+
+	swap_usage="${swap_used}MiB / ${swap_total}MiB"
+
+}
+
+trim_digits() {
+
+	case "${1##*.}" in
+		"00")	printf "%s" "${1/.*}" ;;
+		*)		printf "%s" "${1}" ;;
+	esac
 
 }
 

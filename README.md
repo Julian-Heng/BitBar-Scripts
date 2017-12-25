@@ -9,7 +9,7 @@ Displays CPU usage, OS version, CPU info, model, load averages and uptime. Tried
 Displays memory usage in GiB, memory usage in MiB and swap usage.
 
 #### now-playing.sh
-Displays current song information as well as opening up iTunes or Spotify.
+Displays current song information as well as opening up iTunes or Spotify. Able to pause/play, skip to next track or previous track.
 
 #### temp-stats.sh
 Displays current CPU temperature in celcius and in fahrenheit. Requires [osx-cpu-temp](osx-cpu-temp) to be installed in `/usr/local/bin`
