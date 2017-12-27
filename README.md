@@ -12,7 +12,7 @@ Displays memory usage in GiB, memory usage in MiB and swap usage.
 Displays current song information as well as opening up iTunes or Spotify. Able to pause/play, skip to next track or previous track.
 
 #### temp-stats.sh
-Displays current CPU temperature in celcius and in fahrenheit. Requires [osx-cpu-temp](osx-cpu-temp) to be installed in `/usr/local/bin`
+Displays current CPU temperature in celcius and in fahrenheit and fan speed. Requires [osx-cpu-temp](https://github.com/lavoiesl/osx-cpu-temp) to be installed in `/usr/local/bin` and [iStats](https://github.com/Chris911/iStats) for fan speed.
 
 ## Acknowledgement
 Some code snippets were taken from [neofetch](https://github.com/dylanaraps/neofetch) by Dylan Araps. `now-playing.sh` was originally made by [Adam Kenyon](https://github.com/adampk90), modified for my personal use.

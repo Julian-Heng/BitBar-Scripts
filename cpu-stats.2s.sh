@@ -20,7 +20,7 @@ get_load() {
 get_cpu_info() {
 
 	cpu="$(sysctl -n machdep.cpu.brand_string)"
-	printf "%s" "${cpu/@/(${cores}) @}"
+	printf "%s\\n" "${cpu/@/(${cores}) @}"
 
 }
 
@@ -28,24 +28,24 @@ get_os_info() {
 
 	osx_version="$(sw_vers -productVersion)"
 	case "${osx_version}" in
-		"10.7"*)	printf "%s" "Mac OS X Lion ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.8"*)	printf "%s" "OS X Mountain Lion ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.9"*)	printf "%s" "OS X Mavericks ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.10"*)	printf "%s" "OS X Yosemite ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.11"*)	printf "%s" "OS X El Capitan ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.12"*)	printf "%s" "macOS Sierra ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		"10.13"*)	printf "%s" "macOS High Sierra ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
-		*)			printf "%s" "macOS ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.7"*)	printf "%s\\n" "Mac OS X Lion ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.8"*)	printf "%s\\n" "OS X Mountain Lion ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.9"*)	printf "%s\\n" "OS X Mavericks ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.10"*)	printf "%s\\n" "OS X Yosemite ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.11"*)	printf "%s\\n" "OS X El Capitan ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.12"*)	printf "%s\\n" "macOS Sierra ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		"10.13"*)	printf "%s\\n" "macOS High Sierra ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
+		*)			printf "%s\\n" "macOS ${osx_version} $(sw_vers -buildVersion) $(uname -m)" ;;
 	esac    
 
 }
 
 get_model() {
 
-	if [[ ! -z "$(kextstat | grep "FakeSMC")" ]]; then
-		printf "%s" "Hackintosh (SMBIOS: $(sysctl -n hw.model))"
+	if kextstat | grep -q "FakeSMC"; then
+		printf "%s\\n" "Hackintosh (SMBIOS: $(sysctl -n hw.model))"
 	else
-		printf "%s" "$(sysctl -n hw.model)"
+		printf "%s\\n" "$(sysctl -n hw.model)"
 	fi
 
 }
@@ -78,7 +78,7 @@ get_cpu_usage() {
 
 	cpu_usage="$(ps aux | awk 'BEGIN {sum=0} {sum+=$3}; END {print sum}')"
 	cpu_usage="$((${cpu_usage/\.*} / ${cores:-1}))"
-
+	
 	case "1:${cpu_usage:--}" in 
 		($((cpu_usage >= 100))*)	printf "%s" "${cpu_usage}% | color=#d77c79" ;;
 		($((cpu_usage >= 75))*)		printf "%s" "${cpu_usage}% | color=#f4b887" ;;
@@ -90,9 +90,9 @@ get_cpu_usage() {
 cores="$(sysctl -n hw.logicalcpu_max)"
 echo "CPU: $(get_cpu_usage)"
 echo "---"
-echo "$(get_os_info)"
-echo "$(get_cpu_info)"
-echo "$(get_model)"
+get_os_info
+get_cpu_info
+get_model
 echo "---"
 echo "Load Averages: $(get_load)"
 echo "Uptime: $(get_uptime)"

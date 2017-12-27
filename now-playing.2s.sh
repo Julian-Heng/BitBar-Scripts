@@ -35,15 +35,18 @@ open_app() {
 	case "$1" in
 		"open") osascript -e "tell application \"${2}\" to activate"; exit ;;
 		"play"|"pause") osascript -e "tell application \"${2}\" to ${1}"; exit ;;
-		"next"|"previous")
-			osascript -e "tell application \"${2}\" to ${1} track"
-			if [[ "$playing" == "Spotify" && "$1" == "previous" ]]; then
-				osascript -e "tell application \"${2}\" to ${1} track"
-			fi
-			osascript -e "tell application \"${2}\" to play"
-			exit
-			;;
+		"next"|"previous") next_previous "$@"; exit ;;
 	esac
+
+}
+
+next_previous() {
+
+	osascript -e "tell application \"${2}\" to ${1} track"
+	if [[ "$playing" == "Spotify" && "$1" == "previous" ]]; then
+		osascript -e "tell application \"${2}\" to ${1} track"
+	fi
+	osascript -e "tell application \"${2}\" to play"
 
 }
 
@@ -67,21 +70,25 @@ print_to_bar() {
 
 		track_cmd="name of current track"
 		artist_cmd="artist of current track"
+		album_cmd="album of current track"
 
-		track=$(osascript -e "tell application \"${app}\" to ${track_cmd}")
-		artist=$(osascript -e "tell application \"${app}\" to ${artist_cmd}")
+		track="$(osascript -e "tell application \"${app}\" to ${track_cmd}")"
+		artist="$(osascript -e "tell application \"${app}\" to ${artist_cmd}")"
+		album="$(osascript -e "tell application \"${app}\" to ${album_cmd}")"
 
 		if [[ ! -z "$playing" ]]; then
 			echo "♫"
 		fi
 
 		echo "---"
-		echo "${artist} - ${track}"
+		echo "${artist} - ${album}"
+		echo "${track}"
+		
 		echo "---"
-		if [[ ! -z "$playing" ]]; then
-			echo "Pause | bash='${0}' param1=pause param2=${app} refresh=true terminal=false"
-		else
+		if [[ -z "$playing" ]]; then
 			echo "Play | bash='${0}' param1=play param2=${app} refresh=true terminal=false"
+		else
+			echo "Pause | bash='${0}' param1=pause param2=${app} refresh=true terminal=false"
 		fi
 		echo "Next | bash='${0}' param1=next param2=${app} refresh=true terminal=false"
 		echo "Previous | bash='${0}' param1=previous param2=${app} refresh=true terminal=false"
