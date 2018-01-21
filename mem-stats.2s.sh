@@ -11,10 +11,11 @@
 
 get_memory() {
 
+	vm_stat_cache="$(vm_stat)"
 	mem_total="$(($(sysctl -n hw.memsize) / 1024 / 1024))"
-	mem_wired="$(vm_stat | awk '/wired/ { print $4 }')"
-	mem_active="$(vm_stat | awk '/active / { printf $3 }')"
-	mem_compressed="$(vm_stat | awk '/occupied/ { printf $5 }')"
+	mem_wired="$(awk '/wired/ { print $4 }' <<< "${vm_stat_cache}")"
+	mem_active="$(awk '/active / { printf $3 }' <<< "${vm_stat_cache}")"
+	mem_compressed="$(awk '/occupied/ { printf $5 }' <<< "${vm_stat_cache}")"
 	mem_used="$(((${mem_wired//.} + ${mem_active//.} + ${mem_compressed//.}) * 4 / 1024))"
 	memoryM="${mem_used}MiB / ${mem_total}MiB"
 
@@ -26,8 +27,9 @@ get_memory() {
 
 get_swap() {
 
-	swap_total="$(sysctl vm.swapusage | awk '{ print $4 }')"
-	swap_used="$(sysctl vm.swapusage | awk '{ print $7 }')"
+	swap_cache="$(sysctl vm.swapusage)"
+	swap_total="$(awk '{ print $4 }' <<< "${swap_cache}")"
+	swap_used="$(awk '{ print $7 }' <<< "${swap_cache}")"
 
 	swap_total="$(trim_digits "${swap_total/M*}")"
 	swap_used="$(trim_digits "${swap_used/M*}")"

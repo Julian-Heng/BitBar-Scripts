@@ -8,24 +8,26 @@
 # <bitbar.dependencies>osx-cpu-temp</bitbar.dependencies>
 # <bitbar.dependencies>istats</bitbar.dependencies>
 
+osx_cpu_temp="/usr/local/bin/osx-cpu-temp"
+istats="/usr/local/bin/istats"
+
 use_osx_cpu_temp() {
 
-    temp="$(/usr/local/bin/osx-cpu-temp)"
+    temp="$(${osx_cpu_temp})"
 
 }
 
 use_istats() {
 
-    temp="$(/usr/local/bin/istats cpu --value-only)"
-    temp="${temp//[[:space:]]}°C"
-
+    temp="$(${istats} cpu --value-only)"
+    temp="${temp// }°C"
 
 }
 
 get_fan_speed() {
 
-    fan="$(/usr/local/bin/istats fan --value-only | awk 'NR==2{print;exit}')"
-    fan="${fan//[[:space:]]}"
+    fan="$(${istats} fan --value-only | awk 'NR==2{print;exit}')"
+    fan="${fan// }"
 
 }
 
@@ -34,9 +36,7 @@ print_to_bar() {
     echo "${temp}"
     echo "---" 
     echo "Fahrenheit: $(awk -v t="${temp}" 'BEGIN {printf "%2.1f", t * 1.8 + 32}')°F"
-    if [[ ! -z "$fan" ]]; then
-        echo "Fan Speed: ${fan} RPM"
-    fi
+    [[ ! -z "$fan" ]] && echo "Fan Speed: ${fan} RPM"
     echo "---"
     echo "Refresh | refresh=true"
 
