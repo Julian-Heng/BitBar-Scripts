@@ -8,25 +8,22 @@
 # <bitbar.dependencies>osx-cpu-temp</bitbar.dependencies>
 # <bitbar.dependencies>istats</bitbar.dependencies>
 
-osx_cpu_temp="/usr/local/bin/osx-cpu-temp"
-istats="/usr/local/bin/istats"
-
 use_osx_cpu_temp() {
 
-    temp="$(${osx_cpu_temp})"
+    temp="$($(which osx-cpu-temp))"
 
 }
 
 use_istats() {
 
-    temp="$(${istats} cpu --value-only)"
+    temp="$($(which istats) cpu --value-only)"
     temp="${temp// }°C"
 
 }
 
 get_fan_speed() {
 
-    fan="$(${istats} fan --value-only | awk 'NR==2{print;exit}')"
+    fan="$($(which istats) fan --value-only | awk 'NR==2{print;exit}')"
     fan="${fan// }"
 
 }
