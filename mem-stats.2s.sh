@@ -11,12 +11,13 @@
 
 get_memory() {
 
-	vm_stat_cache="$(vm_stat)"
-	mem_total="$(($(sysctl -n hw.memsize) / 1024 / 1024))"
-	mem_wired="$(awk '/wired/ { print $4 }' <<< "${vm_stat_cache}")"
-	mem_active="$(awk '/active / { printf $3 }' <<< "${vm_stat_cache}")"
-	mem_compressed="$(awk '/occupied/ { printf $5 }' <<< "${vm_stat_cache}")"
-	mem_used="$(((${mem_wired//.} + ${mem_active//.} + ${mem_compressed//.}) * 4 / 1024))"
+    mem_total="$(($(sysctl -n hw.memsize) / 1024 / 1024))"
+
+    read -r mem_wired \
+            mem_compressed \
+            < <(awk '/wired/ { a=$4 } /occupied/ { print a, $5 }' <<< "$(vm_stat)")
+
+    mem_used="$(((${mem_wired//.} + ${mem_compressed//.}) * 4 / 1024))"
 	memoryM="${mem_used}MiB / ${mem_total}MiB"
 
 	mem_total="$(awk -v a=${mem_total} 'BEGIN {printf "%2.0f", a / 1024}')"
